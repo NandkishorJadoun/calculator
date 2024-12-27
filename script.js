@@ -5,10 +5,10 @@
 // Step 2: Implement 4 basic functions
     // add(a, b), subtract(a, b), multiply(a, b), divide(a, b)
 
-    const add = (a,b) => Math.round(a+b * 100) / 100;
-    const subtract = (a,b) => Math.round(a-b * 100) / 100;
-    const multiply = (a,b) => Math.round(a*b * 100) / 100;
-    const divide = (a,b) => Math.round(a/b * 100) / 100;
+    const add = (a,b) => Math.round((a+b) * 100) / 100;
+    const subtract = (a,b) => Math.round((a-b) * 100) / 100;
+    const multiply = (a,b) => Math.round((a*b) * 100) / 100;
+    const divide = (a,b) => Math.round((a/b) * 100) / 100;
 
 // Step 3: Implement a higher-order function
     // operate(operator, a, b): executes the correct operation based on the operator.
@@ -47,38 +47,11 @@
                 screen.innerHTML = "";
                 operand1 += number.id;
                 screen.textContent = operand1;
-
-                deleteKey.addEventListener("click", ()=>{
-                    if(operator == ""){
-                        operand1 = "";
-                        screen.innerHTML = "0";
-                    }
-                })
-
-                decimal.addEventListener("click", ()=>{
-                    if(operator == "" && !operand1.includes(".")){
-                        operand1 += "."
-                        screen.textContent = operand1;
-                    }
-                })
-
             }
             else {
+                screen.innerHTML = "";
                 operand2 += number.id;
-                screen.textContent = operand2;
-
-                deleteKey.addEventListener("click", ()=>{
-                    operand2 = "";
-                    screen.innerHTML = operand2;
-                })
-
-                decimal.addEventListener("click", ()=>{
-                    if(!operand2.includes(".")){
-                        operand2 += "."
-                        screen.textContent = operand2;
-                    }
-                })
-                
+                screen.textContent = operand2;  
             }
 
             console.table(`operand1 = ${operand1}`)
@@ -94,7 +67,6 @@
     for (let operatorButton of operators){
         
         operatorButton.addEventListener("click",()=>{
-            screen.innerHTML = "";
             operator = operatorButton.id;
         })
     }
@@ -107,8 +79,10 @@
     const equalButton = document.querySelector(".function-operator")
     equalButton.addEventListener("click", ()=>{
         screen.innerHTML = "";
-        operate(operator, operand1, operand2)
-        screen.textContent = operate(operator, operand1, operand2);
+        let result = operate(operator, operand1, operand2)
+        screen.textContent = result;
+        operand1 = result;
+        operand2 = "";
     })
 
     // 'AC' button:
@@ -127,7 +101,60 @@
 
         const deleteKey = document.querySelector(".delete-key");
 
+        deleteKey.addEventListener("click", ()=>{
+            if(operator == ""){
+                operand1 = "";
+                screen.innerHTML = "0";
+            }
+
+            else {
+                operand2 = "";
+                screen.innerHTML = operand2;
+            }
+        })
+
     // 'Decimal' button:
         // if there is no decimal in operands, add decimals.
         
         const decimal = document.querySelector(".decimal")
+
+        decimal.addEventListener("click", ()=>{
+            if(operator == "" && !operand1.includes(".")){
+                operand1 += "."
+                screen.textContent = operand1;
+            }
+        
+            else if(!operand2.includes(".")){
+                    operand2 += "."
+                    screen.textContent = operand2;
+            }
+        })
+
+    // 'plusMinus' button:
+        // if there is no minus sign, add it before the number.
+
+        const plusMinus = document.querySelector(".plus-minus")
+
+        plusMinus.addEventListener("click", ()=>{
+            if(operator == ""){
+                if(!operand1.includes("-")){
+                    operand1 = "-" + operand1;
+                    screen.textContent = operand1;
+                }
+
+                else if(operand1.includes("-")){
+                    operand1 = operand1.replace("-","")
+                    screen.textContent = operand1;
+                }
+        }
+            else{
+                if(!operand2.includes("-")){
+                    operand2 = "-" + operand2;
+                    screen.textContent = operand2;
+                }
+                else if(operand2.includes("-")){
+                    operand2 = operand2.replace("-","")
+                    screen.textContent = operand2;
+                }
+            }
+        })
