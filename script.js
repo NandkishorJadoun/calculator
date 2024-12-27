@@ -5,9 +5,9 @@
 // Step 2: Implement 4 basic functions
     // add(a, b), subtract(a, b), multiply(a, b), divide(a, b)
 
-    const add = (a,b) => a + b;
-    const subtract = (a,b) => a - b;
-    const multiply = (a,b) => a * b;
+    const add = (a,b) => Math.round(a+b * 100) / 100;
+    const subtract = (a,b) => Math.round(a-b * 100) / 100;
+    const multiply = (a,b) => Math.round(a*b * 100) / 100;
     const divide = (a,b) => Math.round(a/b * 100) / 100;
 
 // Step 3: Implement a higher-order function
@@ -45,12 +45,40 @@
         number.addEventListener("click", ()=>{
             if(operator == "") {
                 screen.innerHTML = "";
-                operand1 +=number.id;
+                operand1 += number.id;
                 screen.textContent = operand1;
+
+                deleteKey.addEventListener("click", ()=>{
+                    if(operator == ""){
+                        operand1 = "";
+                        screen.innerHTML = "0";
+                    }
+                })
+
+                decimal.addEventListener("click", ()=>{
+                    if(operator == "" && !operand1.includes(".")){
+                        operand1 += "."
+                        screen.textContent = operand1;
+                    }
+                })
+
             }
             else {
                 operand2 += number.id;
                 screen.textContent = operand2;
+
+                deleteKey.addEventListener("click", ()=>{
+                    operand2 = "";
+                    screen.innerHTML = operand2;
+                })
+
+                decimal.addEventListener("click", ()=>{
+                    if(!operand2.includes(".")){
+                        operand2 += "."
+                        screen.textContent = operand2;
+                    }
+                })
+                
             }
 
             console.table(`operand1 = ${operand1}`)
@@ -93,3 +121,13 @@
             operator = "";
             screen.innerHTML = "0"
         })
+
+    // 'DEL' button:
+        // clear the display and reset that particular variable.
+
+        const deleteKey = document.querySelector(".delete-key");
+
+    // 'Decimal' button:
+        // if there is no decimal in operands, add decimals.
+        
+        const decimal = document.querySelector(".decimal")
